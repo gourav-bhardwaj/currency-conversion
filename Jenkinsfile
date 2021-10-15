@@ -1,7 +1,5 @@
 pipeline {
-    agent{
-			label 'helm'
-		}
+    agent any
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
@@ -16,19 +14,6 @@ pipeline {
 
                 // Run maven build.
                 sh "mvn clean compile jib:build"
-            }
-        }
-        stage('Helm Deploy') {
-            steps {
-               def repo = "https://github.com/gourav-bhardwaj/gv-helm-repo"; 
-               sh "helm repo add gv-helm-repo ${repo}"
-            }
-            steps {
-              script {
-					      openshift.withCluster() {
-                  sh "helm upgrade --install currency-conversion-app gv-helm-repo/example-app --values example-app/currency-conversion-values.yaml --wait"
-                }
-              }
             }
         }
     }
