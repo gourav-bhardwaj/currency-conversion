@@ -15,9 +15,11 @@ pipeline {
             }
         }
 		stage('Docker build & push') {
-            steps {
-                sh 'mvn clean compile jib:build'
-            }
+			withCredentials([
+				usernamePassword(credentials: 'DOCKER_CRED', usernameVariable: USER, passwordVariable: PWD)
+			]) {
+				sh "mvn clean compile jib:build -Djib.to.auth.username=${USER} -Djib.to.auth.password=${PWD}"
+			}
         }
     }
 }
