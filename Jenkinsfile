@@ -1,12 +1,14 @@
 pipeline {
     agent any
-    tools {
-        maven "Maven"
-    }
     stages {
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                echo "Hello world"
+                echo "Build working...."
+            }
+        }
+		stage('Test') {
+            steps {
+                echo "Test working...."
             }
         }
     }
