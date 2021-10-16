@@ -11,6 +11,7 @@ pipeline {
         }
 		stage('Test') {
             steps {
+				echo 'Testing started gourav kumar.................................................'
                 sh 'mvn clean test'
             }
         }
