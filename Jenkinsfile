@@ -1,4 +1,3 @@
-IS_CODE_CHANGE = getGitChanges()
 pipeline {
     agent any
 	tools {
@@ -6,11 +5,6 @@ pipeline {
 	}
     stages {
 		stage('Build') {
-			when {
-				expression {
-					IS_CODE_CHANGE == true
-				}
-			}
             steps {
                 sh 'mvn clean install -DskipTests'
             }
