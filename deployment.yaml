@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: currency-conversion
+  name: currency-conversion
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: currency-conversion
+  template:
+    metadata:
+      labels:
+        app: currency-conversion
+    spec:
+      containers:
+      - image: govkumardocker/currency-conversion-service
+        imagePullPolicy: Always
+        name: currency-conversion-service
+        ports:
+        - containerPort: 8100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: currency-conversion
+  name: currency-conversion
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8100
+  selector:
+    app: currency-conversion
