@@ -19,7 +19,7 @@ pipeline {
 				withCredentials([
 				usernamePassword(credentialsId: 'DOCKER_CRED', usernameVariable: 'USER', passwordVariable: 'PWD')
 				]) {
-					sh "mvn clean compile jib:build -Djib.to.auth.username=$USER -Djib.to.auth.password=$PWD"
+					sh 'mvn clean compile jib:build -Djib.to.auth.username=$USER -Djib.to.auth.password=$PWD'
 				}
 			}
         }
