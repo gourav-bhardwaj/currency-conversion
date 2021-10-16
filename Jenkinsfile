@@ -4,6 +4,9 @@ pipeline {
 		maven 'Maven'
 	}
     environment {
+        PROJECT_ID = 'spcurrencyk8sproject'
+        LOCATION = 'us-central1-c'
+        CREDENTIALS_ID = 'gke'
         CLUSTER_NAME_PROD = 'my-cluster'          
     }
     stages {
@@ -27,10 +30,10 @@ pipeline {
 			}
 		}
         }
-	    stage('Connect GKE Cluster') {
-		    steps {
-			    sh "gcloud container clusters get-credentials ${CLUSTER_NAME_PROD} --zone us-central1-c"
-		    }
-	    }
+	stage('Deploy to GKE production cluster') {
+            	steps {
+                        step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME_PROD, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            	}
+        }
     }
 }
