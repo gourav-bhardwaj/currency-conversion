@@ -37,10 +37,12 @@ pipeline {
 				echo "deploy stage";
 				curl -o /var/jenkins_home/google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-220.0.0-linux-x86_64.tar.gz;
 				tar -xvf /var/jenkins_home/google-cloud-sdk.tar.gz -C /var/jenkins_home/;
-				/var/jenkins_home/google-cloud-sdk/install.sh -q;
-				source /var/jenkins_home/google-cloud-sdk/path.bash.inc;
-				 gcloud -version;
 			"""
+         }
+	steps {
+            withEnv(['GCLOUD_PATH=/var/jenkins_home/google-cloud-sdk/bin']) {
+                sh '$GCLOUD_PATH/gcloud --version'
+            }
          }
       }
     }
