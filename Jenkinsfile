@@ -6,6 +6,9 @@ pipeline {
         LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'gke'
     }
+	tools {
+		maven 'Maven'
+	}
     stages {
 	stage('Build') {
             steps {
