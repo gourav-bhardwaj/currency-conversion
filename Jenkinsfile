@@ -35,7 +35,9 @@ pipeline {
                     serverUrl: env.SERVER_URL,
                     clusterName: env.CLUSTER_NAME
                     ]) {
-				  sh 'kubectl get pods'
+					sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
+					sh 'chmod u+x ./kubectl'  
+					sh './kubectl get pods'
 				}
             }
         }
