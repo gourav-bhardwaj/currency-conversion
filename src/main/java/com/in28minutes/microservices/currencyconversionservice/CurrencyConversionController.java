@@ -56,4 +56,8 @@ public class CurrencyConversionController {
 				currencyConversion.getEnvironment() + " feign, HOSTNAME:: " + hostname);
 	}
 
+	@GetMapping("/currency-conversion")
+	public String calculateCurrencyConversionRest() {
+			return "Hello this is currency-conversion service!!!";
+	}
 }
