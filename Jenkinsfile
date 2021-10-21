@@ -1,10 +1,9 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'spcurrencyk8sproject'
         CLUSTER_NAME = 'my-cluster'
-        LOCATION = 'us-central1-c'
-        CREDENTIALS_ID = 'gke'
+        SERVER_URL = 'https://35.194.38.235'
+        CREDENTIALS_ID = 'kubecred'
     }
 	tools {
 		maven 'Maven'
@@ -32,14 +31,12 @@ pipeline {
         }
         stage('Deploy to GKE') {
             steps{
-                step([
-                $class: 'KubernetesEngineBuilder',
-                projectId: env.PROJECT_ID,
-                clusterName: env.CLUSTER_NAME,
-                location: env.LOCATION,
-                manifestPattern: 'manifest.yaml',
-                credentialsId: env.CREDENTIALS_ID,
-                verifyDeployments: true])
+                withKubeConfig([credentialsId: env.CREDENTIALS_ID,
+                    serverUrl: env.SERVER_URL,
+                    clusterName: env.CLUSTER_NAME
+                    ]) {
+				  sh 'kubectl get pods'
+				}
             }
         }
     }
