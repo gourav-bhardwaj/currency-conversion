@@ -1,16 +1,13 @@
 pipeline {
     agent any
-	tools {
-		maven 'Maven'
-	}
     environment {
         PROJECT_ID = 'spcurrencyk8sproject'
+        CLUSTER_NAME = 'my-cluster'
         LOCATION = 'us-central1-c'
         CREDENTIALS_ID = 'gke'
-        CLUSTER_NAME_PROD = 'my-cluster'          
     }
     stages {
-		stage('Build') {
+	stage('Build') {
             steps {
                 sh 'mvn clean install -DskipTests'
             }
@@ -29,6 +26,18 @@ pipeline {
 				sh "mvn clean compile jib:build -Djib.to.auth.username=$USER -Djib.to.auth.password=$PWD"
 			}
 		}
+        }
+        stage('Deploy to GKE') {
+            steps{
+                step([
+                $class: 'KubernetesEngineBuilder',
+                projectId: env.PROJECT_ID,
+                clusterName: env.CLUSTER_NAME,
+                location: env.LOCATION,
+                manifestPattern: 'manifest.yaml',
+                credentialsId: env.CREDENTIALS_ID,
+                verifyDeployments: true])
+            }
         }
     }
 }
