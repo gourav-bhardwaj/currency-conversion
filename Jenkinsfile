@@ -1,9 +1,10 @@
 pipeline {
     agent any
     environment {
-        CLUSTER_NAME = 'my-cluster'
-        SERVER_URL = 'https://35.194.38.235'
-        CREDENTIALS_ID = 'kubecred'
+        PROJECT_ID = 'spcurrencyk8sproject'
+        CLUSTER_NAME = 'gov-app-cluster'
+        LOCATION = 'us-central1-c'
+        CREDENTIALS_ID = 'gke'
     }
 	tools {
 		maven 'Maven'
@@ -39,6 +40,11 @@ pipeline {
 					sh 'chmod u+x ./kubectl'
 					sh './kubectl apply -f manifest.yaml'
 				}
+            }
+        }
+        stage('Deploy on GKE Cluster') {
+            steps {
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
         }
     }
